@@ -1,0 +1,44 @@
+set nocompatible
+set nu
+set relativenumber
+set hlsearch
+set incsearch
+set ignorecase
+set showmatch
+set shiftwidth=4
+set tabstop=4
+set softtabstop=0
+set smarttab
+set expandtab
+set showtabline=2
+
+vmap <C-h> 10zh
+vmap <C-l> 10zl
+imap <C-j> <Down>
+imap <C-k> <Up>
+imap <C-h> <Left>
+imap <C-l> <Right>
+"Left and right vision
+nnoremap zH 50zh
+nnoremap zL 50zl
+nnoremap H ^
+nnoremap L $
+"^$ The symbol is too hard to press
+inoremap jk <ESC>
+nnoremap yil ^y$
+vnoremap <C-c> "+y
+vnoremap <C-v> "+P
+imap <C-v> <C-R>+
+cmap <C-v> <C-R>+
+nnoremap <C-a> ggVG
+imap <C-a> <ESC>ggVG
+vmap <C-a> <ESC>ggVG
+
+" for vscode hover show error
+nnoremap <Leader>h gh
+
+" focus to editor group
+nnoremap gh <C-W>h
+nnoremap gl <C-W>l
+nnoremap gk <C-W>k
+nnoremap gj <C-W>j
