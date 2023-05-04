@@ -160,8 +160,14 @@ lvim.plugins = {
     config = function()
       require('leap').add_default_mappings()
     end
+  },
+  {
+    url = "https://git.sr.ht/~nedia/auto-save.nvim",
+    event = "BufWinEnter",
+    config = function()
+      require("auto-save").setup()
+    end
   }
-
 }
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
