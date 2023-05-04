@@ -65,6 +65,7 @@ lvim.keys.normal_mode["H"] = "^"
 lvim.keys.insert_mode["H"] = "^"
 lvim.keys.normal_mode["L"] = "$"
 lvim.keys.insert_mode["L"] = "$"
+lvim.keys.normal_mode["<C-m>"] = ":nohl<CR>"
 
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
 vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
@@ -86,8 +87,9 @@ lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
+lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
