@@ -91,6 +91,11 @@ lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
 lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 
+
+-- project
+lvim.builtin.project.patterns = {'.lvimproj'}
+lvim.builtin.project.silent_chdir = false
+
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
 
