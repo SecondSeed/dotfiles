@@ -24,6 +24,10 @@ vim.g.clipboard = {
   },
 }
 
+--[[
+ THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
+ `lvim` is the global options object
+]]
 -- vim options
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
@@ -83,7 +87,7 @@ lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
-lvim.colorscheme = "default"
+lvim.colorscheme = "lunar"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -103,12 +107,26 @@ lvim.builtin.which_key.mappings['e'] = {
   ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
 }
 
+-- telescope
+lvim.builtin.which_key.mappings['t'] = {
+  name = "Telescope",
+  ['f'] = { "<cmd>Telescope find_files<cr>", "Find files"},
+  ['g'] = {"<cmd>Telescope live_grep<cr>", "Live grep"},
+  ['b'] = {"<cmd>Telescope buffers<cr>", "Find buffers"},
+  ['h'] = {"<cmd>Telescope help_tags<cr>", "help tags"}
+}
+
 -- project
 lvim.builtin.project.patterns = { '.lvimproj' }
 -- lvim.builtin.project.silent_chdir = false
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
+
+lvim.lsp.buffer_mappings.normal_mode['gD'] = {"<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope'}
+lvim.lsp.buffer_mappings.normal_mode['gd'] = {"<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope"}
+lvim.lsp.buffer_mappings.normal_mode['gr'] = {"<cmd>Telescope lsp_references<cr>", "Goto references telescope"}
+lvim.lsp.buffer_mappings.normal_mode['gi'] = {"<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope"}
 
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
 
@@ -256,6 +274,14 @@ lvim.plugins = {
         },
       })
     end
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    build = "cd app ; npm install",
+    init = function()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
+    ft = { "markdown" },
   }
 }
 
