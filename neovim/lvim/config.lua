@@ -83,7 +83,7 @@ lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
 -- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
--- lvim.colorscheme = "lunar"
+lvim.colorscheme = "default"
 
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
@@ -105,7 +105,7 @@ lvim.builtin.which_key.mappings['e'] = {
 
 -- project
 lvim.builtin.project.patterns = { '.lvimproj' }
-lvim.builtin.project.silent_chdir = false
+-- lvim.builtin.project.silent_chdir = false
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
@@ -229,6 +229,33 @@ lvim.plugins = {
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
     }
+  },
+  {
+    'leoluz/nvim-dap-go',
+    config = function()
+      require("dap-go").setup({
+        -- add any options here
+        dap_configurations = {
+          {
+            -- Must be "go" or it will be ignored by the plugin
+            type = "go",
+            name = "Attach remote",
+            mode = "remote",
+            request = "attach",
+          },
+        },
+        -- delve configurations
+        delve = {
+          -- time to wait for delve to initialize the debug session.
+          -- default to 20 seconds
+          initialize_timeout_sec = 20,
+          -- a string that defines the port to start delve debugger.
+          -- default to string "${port}" which instructs nvim-dap
+          -- to start the process in a random available port
+          port = "2345"
+        },
+      })
+    end
   }
 }
 
