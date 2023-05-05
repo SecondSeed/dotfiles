@@ -54,6 +54,8 @@ lvim.builtin.terminal.open_mapping = "<c-t>"
 -- lvim.keys.normal_mode["gk"] = "<C-w>k"
 -- lvim.keys.normal_mode["gj"] = "<C-w>j"
 
+lvim.keys.normal_mode['<C-a>'] = "ggVG"
+lvim.keys.insert_mode['<C-a>'] = "<ESC>ggVG"
 lvim.keys.insert_mode["<C-j>"] = "<Down>"
 lvim.keys.insert_mode["<C-k>"] = "<Up>"
 lvim.keys.insert_mode["<C-h>"] = "<Left>"
@@ -86,14 +88,23 @@ lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
-lvim.builtin.nvimtree.setup.view.side = "left"
-lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
-lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
-lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 
+-- nvim-tree
+lvim.builtin.nvimtree.setup.view.side = "left"
+lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
+lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
+-- lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
+lvim.builtin.which_key.mappings['e'] = {
+  name = "Explorer",
+  ["t"] = { "<cmd>NvimTreeToggle<CR>", "Toggle" },
+  ["T"] = { "<cmd>:NvimTreeFindFileToggle<CR>", "Find file toggle" },
+  -- ["s"] = { "<cmd>:NvimTreeFocus<CR>", "Show in explorer" },
+  ["F"] = { "<cmd>:NvimTreeFindFile!<CR>", "Find file and update root for current bufname" },
+  ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
+}
 
 -- project
-lvim.builtin.project.patterns = {'.lvimproj'}
+lvim.builtin.project.patterns = { '.lvimproj' }
 lvim.builtin.project.silent_chdir = false
 
 -- Automatically install missing parsers when entering buffer
@@ -174,6 +185,50 @@ lvim.plugins = {
     config = function()
       require("auto-save").setup()
     end
+  },
+  {
+    "folke/noice.nvim",
+    config = function()
+      require("noice").setup({
+        -- add any options here
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+          hover = {
+            enabled = false
+          },
+          signature = {
+            enabled = false
+          }
+        },
+        -- -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
+        },
+        -- routes = {
+        --   {
+        --     view = "split",
+        --     filter = { event = "msg_show", min_height = 20 },
+        --   },
+        -- },
+      })
+    end,
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
   }
 }
 
