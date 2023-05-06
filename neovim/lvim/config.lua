@@ -68,9 +68,9 @@ lvim.keys.normal_mode["yil"] = "^y$"
 lvim.keys.normal_mode["j"] = "gj"
 lvim.keys.normal_mode["k"] = "gk"
 lvim.keys.normal_mode["H"] = "^"
-lvim.keys.insert_mode["H"] = "^"
+lvim.keys.visual_mode["H"] = "^"
 lvim.keys.normal_mode["L"] = "$"
-lvim.keys.insert_mode["L"] = "$"
+lvim.keys.visual_mode["L"] = "$"
 lvim.keys.normal_mode["<C-m>"] = ":nohl<CR>"
 
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
@@ -110,10 +110,10 @@ lvim.builtin.which_key.mappings['e'] = {
 -- telescope
 lvim.builtin.which_key.mappings['t'] = {
   name = "Telescope",
-  ['f'] = { "<cmd>Telescope find_files<cr>", "Find files"},
-  ['g'] = {"<cmd>Telescope live_grep<cr>", "Live grep"},
-  ['b'] = {"<cmd>Telescope buffers<cr>", "Find buffers"},
-  ['h'] = {"<cmd>Telescope help_tags<cr>", "help tags"}
+  ['f'] = { "<cmd>Telescope find_files<cr>", "Find files" },
+  ['g'] = { "<cmd>Telescope live_grep<cr>", "Live grep" },
+  ['b'] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+  ['h'] = { "<cmd>Telescope help_tags<cr>", "help tags" }
 }
 
 -- project
@@ -123,10 +123,10 @@ lvim.builtin.project.patterns = { '.lvimproj' }
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
 
-lvim.lsp.buffer_mappings.normal_mode['gD'] = {"<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope'}
-lvim.lsp.buffer_mappings.normal_mode['gd'] = {"<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope"}
-lvim.lsp.buffer_mappings.normal_mode['gr'] = {"<cmd>Telescope lsp_references<cr>", "Goto references telescope"}
-lvim.lsp.buffer_mappings.normal_mode['gi'] = {"<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope"}
+lvim.lsp.buffer_mappings.normal_mode['gD'] = { "<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope' }
+lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope" }
+lvim.lsp.buffer_mappings.normal_mode['gr'] = { "<cmd>Telescope lsp_references<cr>", "Goto references telescope" }
+lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope" }
 
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
 
@@ -282,6 +282,17 @@ lvim.plugins = {
       vim.g.mkdp_filetypes = { "markdown" }
     end,
     ft = { "markdown" },
+  },
+  {
+    "AckslD/nvim-neoclip.lua",
+    requires = {
+      -- you'll need at least one of these
+      {'nvim-telescope/telescope.nvim'},
+      -- {'ibhagwan/fzf-lua'},
+    },
+    config = function()
+      require('neoclip').setup()
+    end,
   }
 }
 
