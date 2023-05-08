@@ -24,6 +24,10 @@ vim.g.clipboard = {
   },
 }
 
+--[[
+ THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
+ `lvim` is the global options object
+]]
 -- vim options
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
@@ -103,12 +107,27 @@ lvim.builtin.which_key.mappings['e'] = {
   ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
 }
 
+-- telescope
+lvim.builtin.which_key.mappings['t'] = {
+  name = "Telescope",
+  ['f'] = { "<cmd>Telescope find_files<cr>", "Find files" },
+  ['g'] = { "<cmd>Telescope live_grep<cr>", "Live grep" },
+  ['b'] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+  ['h'] = { "<cmd>Telescope help_tags<cr>", "help tags" },
+  ['p'] = { "<cmd>Telescope projects<CR>", "Projects"}
+}
+
 -- project
 lvim.builtin.project.patterns = { '.lvimproj' }
 -- lvim.builtin.project.silent_chdir = false
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
+
+lvim.lsp.buffer_mappings.normal_mode['gD'] = { "<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope' }
+lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope" }
+lvim.lsp.buffer_mappings.normal_mode['gr'] = { "<cmd>Telescope lsp_references<cr>", "Goto references telescope" }
+lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope" }
 
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
 
@@ -213,7 +232,7 @@ lvim.plugins = {
           inc_rename = false,           -- enables an input dialog for inc-rename.nvim
           lsp_doc_border = false,       -- add a border to hover docs and signature help
         },
-        -- routes = {
+        
         --   {
         --     view = "split",
         --     filter = { event = "msg_show", min_height = 20 },
@@ -264,6 +283,17 @@ lvim.plugins = {
       vim.g.mkdp_filetypes = { "markdown" }
     end,
     ft = { "markdown" },
+  },
+  {
+    "AckslD/nvim-neoclip.lua",
+    dependencies = {
+      -- you'll need at least one of these
+      { 'nvim-telescope/telescope.nvim' },
+      -- {'ibhagwan/fzf-lua'},
+    },
+    config = function()
+      require('neoclip').setup()
+    end,
   },
   {
     "jackMort/ChatGPT.nvim",
