@@ -7,9 +7,9 @@ vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
 "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 vim.cmd [[
-		let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-		let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-		set shellquote= shellxquote=
+    let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+    set shellquote= shellxquote=
   ]]
 
 -- Set a compatible clipboard manager
@@ -53,7 +53,7 @@ lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.builtin.terminal.open_mapping = "<c-t>"
--- lvim.keys.normal_mode["gh"] = "<C-w>h"
+-- lvim.keys.normal_mode["gh"] : "<C-w>h"
 -- lvim.keys.normal_mode["gl"] = "<C-w>l"
 -- lvim.keys.normal_mode["gk"] = "<C-w>k"
 -- lvim.keys.normal_mode["gj"] = "<C-w>j"
@@ -73,11 +73,16 @@ lvim.keys.normal_mode["L"] = "$"
 lvim.keys.visual_mode["L"] = "$"
 lvim.keys.normal_mode["<C-m>"] = ":nohl<CR>"
 
+-- remove for replace-with-register
+vim.api.nvim_set_keymap("n", 'gr', '<Plug>(ReplaceWithRegisterOperator)', {})
+vim.api.nvim_set_keymap("x", 'gr', '<Plug>(ReplaceWithRegisterVisual)', {})
+vim.api.nvim_set_keymap("x", 'grr', '<Plug>(ReplaceWithRegisterLine)', {})
+
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
 vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
 
 -- lvim.builtin.which_key.vmappings["/"] = {}
--- lvim.builtin.which_key.mappings["/"] = {}
+-- lvim.builtin.which_key.mappings["/"]e= {}
 
 lvim.keys.normal_mode["]b"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
@@ -114,7 +119,7 @@ lvim.builtin.which_key.mappings['t'] = {
   ['g'] = { "<cmd>Telescope live_grep<cr>", "Live grep" },
   ['b'] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
   ['h'] = { "<cmd>Telescope help_tags<cr>", "help tags" },
-  ['p'] = { "<cmd>Telescope projects<CR>", "Projects"}
+  ['p'] = { "<cmd>Telescope projects<CR>", "Projects" }
 }
 
 -- project
@@ -126,8 +131,10 @@ lvim.builtin.treesitter.auto_install = true
 
 lvim.lsp.buffer_mappings.normal_mode['gD'] = { "<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope' }
 lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope" }
-lvim.lsp.buffer_mappings.normal_mode['gr'] = { "<cmd>Telescope lsp_references<cr>", "Goto references telescope" }
+lvim.lsp.buffer_mappings.normal_mode['gR'] = { "<cmd>Telescope lsp_references<cr>", "Goto references telescope" }
 lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope" }
+
+lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
 
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
 
@@ -232,7 +239,7 @@ lvim.plugins = {
           inc_rename = false,           -- enables an input dialog for inc-rename.nvim
           lsp_doc_border = false,       -- add a border to hover docs and signature help
         },
-        
+
         --   {
         --     view = "split",
         --     filter = { event = "msg_show", min_height = 20 },
@@ -306,6 +313,15 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim"
     }
+  },
+  {
+    "vim-scripts/ReplaceWithRegister"
+  },
+  {
+    'keaising/im-select.nvim',
+    config = function ()
+      require('im_select').setup()
+    end
   }
 }
 
