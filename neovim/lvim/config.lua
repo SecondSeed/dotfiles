@@ -122,6 +122,19 @@ lvim.builtin.which_key.mappings['t'] = {
   ['p'] = { "<cmd>Telescope projects<CR>", "Projects" }
 }
 
+-- obsidian
+lvim.builtin.which_key.mappings['o'] = {
+  name = "Obsidian",
+  ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" }
+}
+
+-- markdown
+lvim.builtin.which_key.mappings['m'] = {
+  name = "Markdown",
+  ['u'] = { "<cmd>UploadClipboard<cr>", "Upload clipboard"},
+  ['p'] = { "<cmd>MarkdownPreview<cr>", "Markdown preview"}
+}
+
 -- project
 lvim.builtin.project.patterns = { '.lvimproj', '.obsidian' }
 -- lvim.builtin.project.silent_chdir = false
@@ -425,6 +438,13 @@ lvim.plugins = {
         end
       end, { noremap = false, expr = true })
     end,
+  },
+  {
+    "askfiy/nvim-picgo",
+    config = function()
+      -- it doesn't require you to do any configuration
+      require("nvim-picgo").setup()
+    end
   }
 }
 
