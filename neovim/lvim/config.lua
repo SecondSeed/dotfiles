@@ -30,9 +30,10 @@ vim.g.clipboard = {
 ]]
 -- vim options
 vim.opt.shiftwidth = 2
-vim.opt.tabstop = 2
-vim.opt.relativenumber = true
+vim.opt.tabstop = 4
 vim.opt.wrap = true
+vim.opt.foldenable = false
+vim.opt.et = true
 
 -- remove mappings
 -- lvim.lsp.buffer_mappings.normal_mode["gl"] = nil
@@ -53,10 +54,6 @@ lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.builtin.terminal.open_mapping = "<c-t>"
--- lvim.keys.normal_mode["gh"] : "<C-w>h"
--- lvim.keys.normal_mode["gl"] = "<C-w>l"
--- lvim.keys.normal_mode["gk"] = "<C-w>k"
--- lvim.keys.normal_mode["gj"] = "<C-w>j"
 
 lvim.keys.normal_mode['<C-a>'] = "ggVG"
 lvim.keys.insert_mode['<C-a>'] = "<ESC>ggVG"
@@ -80,9 +77,6 @@ vim.api.nvim_set_keymap("x", 'grr', '<Plug>(ReplaceWithRegisterLine)', {})
 
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
 vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
-
--- lvim.builtin.which_key.vmappings["/"] = {}
--- lvim.builtin.which_key.mappings["/"]e= {}
 
 lvim.keys.normal_mode["]b"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
@@ -136,7 +130,7 @@ lvim.builtin.which_key.mappings['m'] = {
 }
 
 -- project
-lvim.builtin.project.patterns = { '.lvimproj', '.obsidian' }
+lvim.builtin.project.patterns = { '.lvimproj', '.obsidian', '.idea' }
 -- lvim.builtin.project.silent_chdir = false
 
 -- Automatically install missing parsers when entering buffer
