@@ -14,14 +14,14 @@ vim.cmd [[
 
 -- Set a compatible clipboard manager
 vim.g.clipboard = {
-  copy = {
-    ["+"] = "win32yank.exe -i --crlf",
-    ["*"] = "win32yank.exe -i --crlf",
-  },
-  paste = {
-    ["+"] = "win32yank.exe -o --lf",
-    ["*"] = "win32yank.exe -o --lf",
-  },
+    copy = {
+        ["+"] = "win32yank.exe -i --crlf",
+        ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+        ["+"] = "win32yank.exe -o --lf",
+        ["*"] = "win32yank.exe -o --lf",
+    },
 }
 
 --[[
@@ -29,12 +29,12 @@ vim.g.clipboard = {
  `lvim` is the global options object
 ]]
 -- vim options
-vim.opt.shiftwidth = 2
+vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.wrap = true
 vim.opt.foldenable = false
 vim.opt.et = true
-
+vim.opt.cot = "menu,preview,noinsert,noselect"
 -- remove mappings
 -- lvim.lsp.buffer_mappings.normal_mode["gl"] = nil
 
@@ -42,9 +42,9 @@ vim.opt.et = true
 -- general
 lvim.log.level = "info"
 lvim.format_on_save = {
-  enabled = true,
-  pattern = "*.lua",
-  timeout = 1000,
+    enabled = true,
+    pattern = "*.lua",
+    timeout = 1000,
 }
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
@@ -98,36 +98,39 @@ lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
 -- lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 lvim.builtin.which_key.mappings['e'] = {
-  name = "Explorer",
-  ["t"] = { "<cmd>NvimTreeToggle<CR>", "Toggle" },
-  ["T"] = { "<cmd>:NvimTreeFindFileToggle<CR>", "Find file toggle" },
-  -- ["s"] = { "<cmd>:NvimTreeFocus<CR>", "Show in explorer" },
-  ["F"] = { "<cmd>:NvimTreeFindFile!<CR>", "Find file and update root for current bufname" },
-  ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
+    name = "Explorer",
+    ["t"] = { "<cmd>NvimTreeToggle<CR>", "Toggle" },
+    ["T"] = { "<cmd>:NvimTreeFindFileToggle<CR>", "Find file toggle" },
+    -- ["s"] = { "<cmd>:NvimTreeFocus<CR>", "Show in explorer" },
+    ["F"] = { "<cmd>:NvimTreeFindFile!<CR>", "Find file and update root for current bufname" },
+    ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
 }
 
 -- telescope
 lvim.builtin.which_key.mappings['t'] = {
-  name = "Telescope",
-  ['f'] = { "<cmd>Telescope find_files<cr>", "Find files" },
-  ['g'] = { "<cmd>Telescope live_grep<cr>", "Live grep" },
-  ['b'] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
-  ['h'] = { "<cmd>Telescope help_tags<cr>", "help tags" },
-  ['p'] = { "<cmd>Telescope projects<CR>", "Projects" }
+    name = "Telescope",
+    ['f'] = { "<cmd>Telescope find_files<cr>", "Find files" },
+    ['g'] = { "<cmd>Telescope live_grep<cr>", "Live grep" },
+    ['b'] = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+    ['h'] = { "<cmd>Telescope help_tags<cr>", "help tags" },
+    ['p'] = { "<cmd>Telescope projects<CR>", "Projects" }
 }
 
 -- obsidian
 lvim.builtin.which_key.mappings['o'] = {
-  name = "Obsidian",
-  ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" }
+    name = "Obsidian",
+    ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" }
 }
 
 -- markdown
 lvim.builtin.which_key.mappings['m'] = {
-  name = "Markdown",
-  ['u'] = { "<cmd>UploadClipboard<cr>", "Upload clipboard"},
-  ['p'] = { "<cmd>MarkdownPreview<cr>", "Markdown preview"}
+    name = "Markdown",
+    ['u'] = { "<cmd>lua require'nvim-picgo'.upload_clipboard()<cr>", "Upload clipboard" },
+    ['p'] = { "<cmd>MarkdownPreview<cr>", "Markdown preview" }
 }
+
+-- cmp
+  lvim.builtin.cmp.preselect = require('cmp').PreselectMode.First
 
 -- project
 lvim.builtin.project.patterns = { '.lvimproj', '.obsidian', '.idea' }
@@ -196,250 +199,270 @@ lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
 lvim.plugins = {
-  {
-    "kylechui/nvim-surround",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end
-  },
-  {
-    "ggandor/leap.nvim",
-    config = function()
-      require('leap').add_default_mappings()
-    end
-  },
-  {
-    url = "https://git.sr.ht/~nedia/auto-save.nvim",
-    event = "BufWinEnter",
-    config = function()
-      require("auto-save").setup()
-    end
-  },
-  {
-    "folke/noice.nvim",
-    config = function()
-      require("noice").setup({
-        -- add any options here
-        lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-          },
-          hover = {
-            enabled = false
-          },
-          signature = {
-            enabled = false
-          }
+    {
+        "kylechui/nvim-surround",
+        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end
+    },
+    {
+        "ggandor/leap.nvim",
+        event = "BufWinEnter",
+        config = function()
+            require('leap').add_default_mappings()
+        end
+    },
+    {
+        url = "https://git.sr.ht/~nedia/auto-save.nvim",
+        event = "BufWinEnter",
+        config = function()
+            require("auto-save").setup()
+        end
+    },
+    {
+        "folke/noice.nvim",
+        config = function()
+            require("noice").setup({
+                -- add any options here
+                lsp = {
+                    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+                    override = {
+                        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+                        ["vim.lsp.util.stylize_markdown"] = true,
+                        ["cmp.entry.get_documentation"] = true,
+                    },
+                    hover = {
+                        enabled = false
+                    },
+                    signature = {
+                        enabled = false
+                    }
+                },
+                -- -- you can enable a preset for easier configuration
+                presets = {
+                    bottom_search = true,         -- use a classic bottom cmdline for search
+                    command_palette = true,       -- position the cmdline and popupmenu together
+                    long_message_to_split = true, -- long messages will be sent to a split
+                    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+                    lsp_doc_border = false,       -- add a border to hover docs and signature help
+                },
+                --   {
+                --     view = "split",
+                --     filter = { event = "msg_show", min_height = 20 },
+                --   },
+                -- },
+            })
+        end,
+        dependencies = {
+            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+            "MunifTanjim/nui.nvim",
+            -- OPTIONAL:
+            --   `nvim-notify` is only needed, if you want to use the notification view.
+            --   If not available, we use `mini` as the fallback
+            "rcarriga/nvim-notify",
+        }
+    },
+    {
+        'leoluz/nvim-dap-go',
+        ft = { "go", "golang", "gosum" },
+        config = function()
+            require("dap-go").setup({
+                -- add any options here
+                dap_configurations = {
+                    {
+                        -- Must be "go" or it will be ignored by the plugin
+                        type = "go",
+                        name = "Attach remote",
+                        mode = "remote",
+                        request = "attach",
+                    },
+                },
+                -- delve configurations
+                delve = {
+                    -- time to wait for delve to initialize the debug session.
+                    -- default to 20 seconds
+                    initialize_timeout_sec = 20,
+                    -- a string that defines the port to start delve debugger.
+                    -- default to string "${port}" which instructs nvim-dap
+                    -- to start the process in a random available port
+                    port = "2345"
+                },
+            })
+        end
+    },
+    {
+        "iamcco/markdown-preview.nvim",
+        build = "cd app ; npm install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
+        pin = true,
+    },
+    {
+        "ellisonleao/glow.nvim",
+        config = true,
+        cmd = "Glow"
+    },
+    {
+        -- clipboard manager
+        "AckslD/nvim-neoclip.lua",
+        dependencies = {
+            -- you'll need at least one of these
+            { 'nvim-telescope/telescope.nvim' },
+            -- {'ibhagwan/fzf-lua'},
         },
-        -- -- you can enable a preset for easier configuration
-        presets = {
-          bottom_search = true,         -- use a classic bottom cmdline for search
-          command_palette = true,       -- position the cmdline and popupmenu together
-          long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false,       -- add a border to hover docs and signature help
+        config = function()
+            require('neoclip').setup()
+        end,
+    },
+    {
+        "jackMort/ChatGPT.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("chatgpt").setup()
+        end,
+        dependencies = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    },
+    {
+        "vim-scripts/ReplaceWithRegister",
+        event = "BufWinEnter",
+    },
+    {
+        'keaising/im-select.nvim',
+        event = "BufWinEnter",
+        config = function()
+            require('im_select').setup()
+        end
+    },
+    {
+        "epwalsh/obsidian.nvim",
+        lazy = true,
+        event = { "BufReadPre D:/note/note/**.md" },
+        -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
+        -- event = { "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
+        dependencies = {
+            -- Required.
+            "nvim-lua/plenary.nvim",
+
+            -- Optional, for completion.
+            "hrsh7th/nvim-cmp",
+
+            -- Optional, for search and quick-switch functionality.
+            "nvim-telescope/telescope.nvim",
+
+            -- Optional, an alternative to telescope for search and quick-switch functionality.
+            -- "ibhagwan/fzf-lua"
+
+            -- Optional, another alternative to telescope for search and quick-switch functionality.
+            -- "junegunn/fzf",
+            -- "junegunn/fzf.vim"
+
+            -- Optional, alternative to nvim-treesitter for syntax highlighting.
+            "godlygeek/tabular",
+            "preservim/vim-markdown",
         },
-        --   {
-        --     view = "split",
-        --     filter = { event = "msg_show", min_height = 20 },
-        --   },
-        -- },
-      })
-    end,
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
+        opts = {
+            dir = "D:/note/note", -- no need to call 'vim.fn.expand' here
+            -- Optional, if you keep notes in a specific subdirectory of your vault.
+            -- notes_subdir = "notes",
+            -- Optional, if you keep daily notes in a separate directory.
+            daily_notes = {
+                folder = "dairy",
+            },
+            -- Optional, completion.
+            completion = {
+                nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+            },
+            -- Optional, customize how names/IDs for new notes are created.
+            note_id_func = function(title)
+                -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+                -- In this case a note with the title 'My new note' will given an ID that looks
+                -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
+                local suffix = ""
+                if title ~= nil then
+                    -- If title is given, transform it into valid file name.
+                    suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+                else
+                    -- If title is nil, just add 4 random uppercase letters to the suffix.
+                    for _ = 1, 4 do
+                        suffix = suffix .. string.char(math.random(65, 90))
+                    end
+                end
+                return tostring(os.time()) .. "-" .. suffix
+            end,
+            -- Optional, set to true if you don't want Obsidian to manage frontmatter.
+            disable_frontmatter = false,
+            -- Optional, alternatively you can customize the frontmatter data.
+            note_frontmatter_func = function(note)
+                -- This is equivalent to the default frontmatter function.
+                local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+                -- `note.metadata` contains any manually added fields in the frontmatter.
+                -- So here we just make sure those fields are kept in the frontmatter.
+                if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
+                    for k, v in pairs(note.metadata) do
+                        out[k] = v
+                    end
+                end
+                return out
+            end,
+            -- Optional, for templates (see below).
+            templates = {
+                subdir = "templates",
+                date_format = "%Y-%m-%d-%a",
+                time_format = "%H:%M",
+            },
+            -- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
+            -- URL it will be ignored but you can customize this behavior here.
+            follow_url_func = function(url)
+                -- Open the URL in the default web browser.
+                vim.fn.jobstart({ "open", url }) -- Mac OS
+                -- vim.fn.jobstart({"xdg-open", url})  -- linux
+            end,
+            -- Optional, set to true if you use the Obsidian Advanced URI plugin.
+            -- https://github.com/Vinzent03/obsidian-advanced-uri
+            use_advanced_uri = true,
+            -- Optional, set to true to force ':ObsidianOpen' to bring the app to the foreground.
+            open_app_foreground = false,
+        },
+        config = function(_, opts)
+            require("obsidian").setup(opts)
+
+            -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
+            -- see also: 'follow_url_func' config option above.
+            vim.keymap.set("n", "gf", function()
+                if require("obsidian").util.cursor_on_markdown_link() then
+                    return "<cmd>ObsidianFollowLink<CR>"
+                else
+                    return "gf"
+                end
+            end, { noremap = false, expr = true })
+        end,
+    },
+    {
+        "SecondSeed/nvim-picgo",
+        branch = 'for_hw',
+        pin = true,
+        config = function()
+            -- it doesn't require you to do any configuration
+            require("nvim-picgo").setup()
+        end
+    },
+    {
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        version = "1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!).
+        build = "make install_jsregexp"
     }
-  },
-  {
-    'leoluz/nvim-dap-go',
-    config = function()
-      require("dap-go").setup({
-        -- add any options here
-        dap_configurations = {
-          {
-            -- Must be "go" or it will be ignored by the plugin
-            type = "go",
-            name = "Attach remote",
-            mode = "remote",
-            request = "attach",
-          },
-        },
-        -- delve configurations
-        delve = {
-          -- time to wait for delve to initialize the debug session.
-          -- default to 20 seconds
-          initialize_timeout_sec = 20,
-          -- a string that defines the port to start delve debugger.
-          -- default to string "${port}" which instructs nvim-dap
-          -- to start the process in a random available port
-          port = "2345"
-        },
-      })
-    end
-  },
-  {
-    "iamcco/markdown-preview.nvim",
-    build = "cd app ; npm install",
-    init = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-    end,
-    ft = { "markdown" },
-  },
-  {
-    "AckslD/nvim-neoclip.lua",
-    dependencies = {
-      -- you'll need at least one of these
-      { 'nvim-telescope/telescope.nvim' },
-      -- {'ibhagwan/fzf-lua'},
-    },
-    config = function()
-      require('neoclip').setup()
-    end,
-  },
-  {
-    "jackMort/ChatGPT.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("chatgpt").setup()
-    end,
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
-    }
-  },
-  {
-    "vim-scripts/ReplaceWithRegister"
-  },
-  {
-    'keaising/im-select.nvim',
-    config = function()
-      require('im_select').setup()
-    end
-  },
-  {
-    "epwalsh/obsidian.nvim",
-    lazy = true,
-    event = { "BufReadPre D:/note/note/**.md" },
-    -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
-    -- event = { "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
-    dependencies = {
-      -- Required.
-      "nvim-lua/plenary.nvim",
-
-      -- Optional, for completion.
-      "hrsh7th/nvim-cmp",
-
-      -- Optional, for search and quick-switch functionality.
-      "nvim-telescope/telescope.nvim",
-
-      -- Optional, an alternative to telescope for search and quick-switch functionality.
-      -- "ibhagwan/fzf-lua"
-
-      -- Optional, another alternative to telescope for search and quick-switch functionality.
-      -- "junegunn/fzf",
-      -- "junegunn/fzf.vim"
-
-      -- Optional, alternative to nvim-treesitter for syntax highlighting.
-      "godlygeek/tabular",
-      "preservim/vim-markdown",
-    },
-    opts = {
-      dir = "D:/note/note", -- no need to call 'vim.fn.expand' here
-      -- Optional, if you keep notes in a specific subdirectory of your vault.
-      -- notes_subdir = "notes",
-      -- Optional, if you keep daily notes in a separate directory.
-      daily_notes = {
-        folder = "dairy",
-      },
-      -- Optional, completion.
-      completion = {
-        nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
-      },
-      -- Optional, customize how names/IDs for new notes are created.
-      note_id_func = function(title)
-        -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
-        -- In this case a note with the title 'My new note' will given an ID that looks
-        -- like '1657296016-my-new-note', and therefore the file name '1657296016-my-new-note.md'
-        local suffix = ""
-        if title ~= nil then
-          -- If title is given, transform it into valid file name.
-          suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
-        else
-          -- If title is nil, just add 4 random uppercase letters to the suffix.
-          for _ = 1, 4 do
-            suffix = suffix .. string.char(math.random(65, 90))
-          end
-        end
-        return tostring(os.time()) .. "-" .. suffix
-      end,
-      -- Optional, set to true if you don't want Obsidian to manage frontmatter.
-      disable_frontmatter = false,
-      -- Optional, alternatively you can customize the frontmatter data.
-      note_frontmatter_func = function(note)
-        -- This is equivalent to the default frontmatter function.
-        local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-        -- `note.metadata` contains any manually added fields in the frontmatter.
-        -- So here we just make sure those fields are kept in the frontmatter.
-        if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
-          for k, v in pairs(note.metadata) do
-            out[k] = v
-          end
-        end
-        return out
-      end,
-      -- Optional, for templates (see below).
-      templates = {
-        subdir = "templates",
-        date_format = "%Y-%m-%d-%a",
-        time_format = "%H:%M",
-      },
-      -- Optional, by default when you use `:ObsidianFollowLink` on a link to an external
-      -- URL it will be ignored but you can customize this behavior here.
-      follow_url_func = function(url)
-        -- Open the URL in the default web browser.
-        vim.fn.jobstart({ "open", url }) -- Mac OS
-        -- vim.fn.jobstart({"xdg-open", url})  -- linux
-      end,
-      -- Optional, set to true if you use the Obsidian Advanced URI plugin.
-      -- https://github.com/Vinzent03/obsidian-advanced-uri
-      use_advanced_uri = true,
-      -- Optional, set to true to force ':ObsidianOpen' to bring the app to the foreground.
-      open_app_foreground = false,
-    },
-    config = function(_, opts)
-      require("obsidian").setup(opts)
-
-      -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
-      -- see also: 'follow_url_func' config option above.
-      vim.keymap.set("n", "gf", function()
-        if require("obsidian").util.cursor_on_markdown_link() then
-          return "<cmd>ObsidianFollowLink<CR>"
-        else
-          return "gf"
-        end
-      end, { noremap = false, expr = true })
-    end,
-  },
-  {
-    "askfiy/nvim-picgo",
-    config = function()
-      -- it doesn't require you to do any configuration
-      require("nvim-picgo").setup()
-    end
-  }
 }
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
