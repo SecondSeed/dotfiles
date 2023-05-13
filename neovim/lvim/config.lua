@@ -130,7 +130,7 @@ lvim.builtin.which_key.mappings['m'] = {
 }
 
 -- cmp
-  lvim.builtin.cmp.preselect = require('cmp').PreselectMode.First
+  lvim.builtin.cmp.preselect = require('cmp').PreselectMode.go
 
 -- project
 lvim.builtin.project.patterns = { '.lvimproj', '.obsidian', '.idea' }
