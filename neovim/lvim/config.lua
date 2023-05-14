@@ -107,7 +107,7 @@ lvim.builtin.which_key.mappings['e'] = {
 
 -- telescope
 lvim.builtin.which_key.mappings["sb"] = { "<cmd>Telescope buffers<cr>", "Find buffers" }
-lvim.builtin.which_key.mappings["sp"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["sP"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- snippets
 lvim.builtin.luasnip.sources.friendly_snippets = true
