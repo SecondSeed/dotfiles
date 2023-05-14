@@ -1,3 +1,7 @@
+--[[
+ THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
+ `lvim` is the global options object
+]]
 -- Enable powershell as your default shell
 vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
@@ -20,6 +24,10 @@ vim.g.clipboard = {
     },
 }
 
+--[[
+ THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
+ `lvim` is the global options object
+]]
 -- vim options
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
@@ -27,6 +35,8 @@ vim.opt.wrap = true
 vim.opt.foldenable = false
 vim.opt.et = true
 vim.opt.cot = "menu,preview,noinsert,noselect"
+-- remove mappings
+-- lvim.lsp.buffer_mappings.normal_mode["gl"] = nil
 
 -- general
 lvim.log.level = "info"
@@ -35,7 +45,6 @@ lvim.format_on_save = {
     pattern = "*.lua",
     timeout = 1000,
 }
-
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -44,6 +53,7 @@ lvim.leader = "space"
 -- add your own keymapping
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.builtin.terminal.open_mapping = "<c-t>"
+
 lvim.keys.normal_mode['<C-a>'] = "ggVG"
 lvim.keys.insert_mode['<C-a>'] = "<ESC>ggVG"
 lvim.keys.insert_mode["<C-j>"] = "<Down>"
@@ -64,13 +74,15 @@ vim.api.nvim_set_keymap("n", 'gr', '<Plug>(ReplaceWithRegisterOperator)', {})
 vim.api.nvim_set_keymap("x", 'gr', '<Plug>(ReplaceWithRegisterVisual)', {})
 vim.api.nvim_set_keymap("x", 'grr', '<Plug>(ReplaceWithRegisterLine)', {})
 
--- comment
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
 vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
 
--- buffer
 lvim.keys.normal_mode["]b"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
+
+-- -- Use which-key to add extra bindings with the leader-key prefix
+-- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
+-- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
 lvim.colorscheme = "lunar"
@@ -83,7 +95,6 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 lvim.builtin.nvimtree.setup.update_focused_file.update_root = false
-
 -- lvim.builtin.nvimtree.setup.sync_root_with_cwd = false
 lvim.builtin.which_key.mappings['e'] = {
     name = "Explorer",
@@ -98,11 +109,17 @@ lvim.builtin.which_key.mappings['e'] = {
 lvim.builtin.which_key.mappings["sb"] = { "<cmd>Telescope buffers<cr>", "Find buffers" }
 lvim.builtin.which_key.mappings["sp"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
+-- snippets
+lvim.builtin.luasnip.sources.friendly_snippets = true
+
 -- obsidian
 lvim.builtin.which_key.mappings['o'] = {
     name = "Obsidian",
     ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" }
 }
+
+-- gitsigns
+lvim.builtin.gitsigns.opts.current_line_blame = true
 
 -- markdown
 lvim.builtin.which_key.mappings['m'] = {
@@ -121,11 +138,11 @@ lvim.builtin.project.patterns = { '.lvimproj', '.idea' }
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
 
--- lsp
 lvim.lsp.buffer_mappings.normal_mode['gD'] = { "<cmd>Telescope lsp_type_definitions<cr> ", 'Goto declaration telescope' }
 lvim.lsp.buffer_mappings.normal_mode['gd'] = { "<cmd>Telescope lsp_definitions<cr>", "Goto definitions telescope" }
 lvim.lsp.buffer_mappings.normal_mode['gR'] = { "<cmd>Telescope lsp_references<cr>", "Goto references telescope" }
 lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope" }
+
 lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
 
 -- lvim.builtin.treesitter.ignore_install = { "haskell" }
@@ -436,13 +453,6 @@ lvim.plugins = {
             require("nvim-picgo").setup()
         end
     },
-    {
-        "L3MON4D3/LuaSnip",
-        -- follow latest release.
-        version = "1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-        -- install jsregexp (optional!).
-        build = "make install_jsregexp"
-    }
 }
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
