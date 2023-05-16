@@ -77,6 +77,11 @@ vim.api.nvim_set_keymap("x", 'grr', '<Plug>(ReplaceWithRegisterLine)', {})
 vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
 vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
 
+-- vim-easy-align
+vim.api.nvim_set_keymap("n", "ga", "<Plug>(EasyAlign)", {})
+vim.api.nvim_set_keymap("x", "ga", "<Plug>(EasyAlign)", {})
+-- vim.api.nvim_set_keymap('n', "gmt", "gv EasyAlign ", {})
+
 lvim.keys.normal_mode["]b"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
 
@@ -115,7 +120,8 @@ lvim.builtin.luasnip.sources.friendly_snippets = true
 -- obsidian
 lvim.builtin.which_key.mappings['o'] = {
     name = "Obsidian",
-    ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" }
+    ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" },
+    ['p'] = { "<cmd>ObsidianProject<cr>", "ObsidianProject" },
 }
 
 -- gitsigns
@@ -125,11 +131,12 @@ lvim.builtin.gitsigns.opts.current_line_blame = true
 lvim.builtin.which_key.mappings['m'] = {
     name = "Markdown",
     ['u'] = { "<cmd>lua require'nvim-picgo'.upload_clipboard()<cr>", "Upload clipboard" },
-    ['p'] = { "<cmd>MarkdownPreview<cr>", "Markdown preview" }
+    ['p'] = { "<cmd>MarkdownPreview<cr>", "Markdown preview" },
+    ['c'] = { "<cmd>EditMarkdownTable<cr>", "Edit table cell" },
 }
 
 -- cmp
-lvim.builtin.cmp.preselect = require('cmp').PreselectMode.go
+lvim.builtin.cmp.preselect = require('cmp').PreselectMode.None
 
 -- project
 lvim.builtin.project.patterns = { '.lvimproj', '.idea' }
@@ -243,11 +250,11 @@ lvim.plugins = {
                 },
                 -- -- you can enable a preset for easier configuration
                 presets = {
-                    bottom_search = true, -- use a classic bottom cmdline for search
-                    command_palette = true, -- position the cmdline and popupmenu together
+                    bottom_search = true,         -- use a classic bottom cmdline for search
+                    command_palette = true,       -- position the cmdline and popupmenu together
                     long_message_to_split = true, -- long messages will be sent to a split
-                    inc_rename = false, -- enables an input dialog for inc-rename.nvim
-                    lsp_doc_border = false, -- add a border to hover docs and signature help
+                    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+                    lsp_doc_border = false,       -- add a border to hover docs and signature help
                 },
                 --   {
                 --     view = "split",
@@ -339,13 +346,15 @@ lvim.plugins = {
         'keaising/im-select.nvim',
         event = "BufWinEnter",
         config = function()
-            require('im_select').setup()
+            require('im_select').setup({
+                set_default_events = { "InsertLeave" }
+            })
         end
     },
     {
         "epwalsh/obsidian.nvim",
         lazy = true,
-        event = { "BufReadPre D:/note/note/**.md" },
+        event = { "BufReadPre D:/note/note/**.md", "VeryLazy" },
         -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
         -- event = { "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
         dependencies = {
@@ -444,15 +453,37 @@ lvim.plugins = {
                     return "gf"
                 end
             end, { noremap = false, expr = true })
+            vim.api.nvim_create_user_command("ObsidianProject", function()
+                require('project_nvim.project').set_pwd(opts.dir, "open obsidian path")
+                vim.cmd("NvimTreeToggle")
+                vim.cmd("ObsidianToday")
+            end, {})
         end,
     },
     {
-        "askfiy/nvim-picgo",
+        "SecondSeed/nvim-picgo",
+        branch = 'for_hw',
+        pin = true,
         config = function()
             -- it doesn't require you to do any configuration
             require("nvim-picgo").setup()
         end
     },
+    {
+        "mg979/vim-visual-multi",
+        event = "BufWinEnter"
+    },
+    {
+        'kiran94/edit-markdown-table.nvim',
+        config = function()
+            require('edit-markdown-table').setup()
+        end,
+        dependencies = { "nvim-treesitter/nvim-treesitter" },
+        cmd = "EditMarkdownTable",
+    },
+    {
+        "junegunn/vim-easy-align"
+    }
 }
 
 -- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
