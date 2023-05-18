@@ -1,8 +1,3 @@
---[[
- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
- `lvim` is the global options object
-]]
--- Enable powershell as your default shell
 vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
 "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
@@ -60,6 +55,8 @@ lvim.keys.insert_mode["<C-j>"] = "<Down>"
 lvim.keys.insert_mode["<C-k>"] = "<Up>"
 lvim.keys.insert_mode["<C-h>"] = "<Left>"
 lvim.keys.insert_mode["<C-l>"] = "<Right>"
+lvim.keys.insert_mode["<C-v>"] = '"+P'
+lvim.keys.visual_mode["<C-v>"] = '"+P'
 lvim.keys.normal_mode["yil"] = "^y$"
 lvim.keys.normal_mode["j"] = "gj"
 lvim.keys.normal_mode["k"] = "gk"
@@ -80,14 +77,12 @@ vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)',
 -- vim-easy-align
 vim.api.nvim_set_keymap("n", "ga", "<Plug>(EasyAlign)", {})
 vim.api.nvim_set_keymap("x", "ga", "<Plug>(EasyAlign)", {})
--- vim.api.nvim_set_keymap('n', "gmt", "gv EasyAlign ", {})
 
+-- vim-visual-multi
+vim.api.nvim_set_keymap('n', '<C-M-Down>', "<Plug>(VM-Add-Cursor-Down)", {})
+vim.api.nvim_set_keymap('n', '<C-M-Up>', "<Plug>(VM-Add-Cursor-Up)", {})
 lvim.keys.normal_mode["]b"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["[b"] = ":BufferLineCyclePrev<CR>"
-
--- -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["W"] = { "<cmd>noautocmd w<cr>", "Save without formatting" }
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 -- -- Change theme settings
 lvim.colorscheme = "lunar"
@@ -113,6 +108,9 @@ lvim.builtin.which_key.mappings['e'] = {
 -- telescope
 lvim.builtin.which_key.mappings["sb"] = { "<cmd>Telescope buffers<cr>", "Find buffers" }
 lvim.builtin.which_key.mappings["sP"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.telescope.defaults.layout_strategy = 'horizontal'
+lvim.builtin.telescope.defaults.layout_config = {height = 0.9, width = 0.9, prompt_position = 'bottom', preview_width = 0.6}
+lvim.builtin.telescope.defaults.file_ignore_patterns = {'.obsidian', '.git', '.idea', '.vscode'}
 
 -- snippets
 lvim.builtin.luasnip.sources.friendly_snippets = true
@@ -122,6 +120,8 @@ lvim.builtin.which_key.mappings['o'] = {
     name = "Obsidian",
     ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" },
     ['p'] = { "<cmd>ObsidianProject<cr>", "ObsidianProject" },
+    ['g'] = { "<cmd>Telescope live_grep search_dirs=D:/note/note<CR>", "Search text"},
+    ['f'] = { "<cmd>Telescope find_files search_dirs=D:/note/note<CR>", "Find file"}
 }
 
 -- gitsigns
@@ -151,57 +151,6 @@ lvim.lsp.buffer_mappings.normal_mode['gR'] = { "<cmd>Telescope lsp_references<cr
 lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementations<cr>", "Goto implementations telescope" }
 
 lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
-
--- lvim.builtin.treesitter.ignore_install = { "haskell" }
-
--- -- ensure these parsers are always installed, useful for those without a strict filetype
--- lvim.builtin.treesitter.ensure_installed = { "comment", "markdown_inline", "regex" }
-
--- -- generic LSP settings <https://www.lunarvim.org/docs/languages#lsp-support>
-
--- --- disable automatic installation of servers
--- lvim.lsp.installer.setup.automatic_installation = false
-
--- ---configure a server manually. IMPORTANT: Requires `:LvimCacheReset` to take effect
--- ---see the full default list `:lua =lvim.lsp.automatic_configuration.skipped_servers`
--- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
--- local opts = {} -- check the lspconfig documentation for a list of all possible options
--- require("lvim.lsp.manager").setup("pyright", opts)
-
--- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. IMPORTANT: Requires `:LvimCacheReset` to take effect
--- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
--- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
---   return server ~= "emmet_ls"
--- end, lvim.lsp.automatic_configuration.skipped_servers)
-
--- -- you can set a custom on_attach function that will be used for all the language servers
--- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
--- lvim.lsp.on_attach_callback = function(client, bufnr)
---   local function buf_set_option(...)
---     vim.api.nvim_buf_set_option(bufnr, ...)
---   end
---   --Enable completion triggered by <c-x><c-o>
---   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
--- end
-
--- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
--- local formatters = require "lvim.lsp.null-ls.formatters"
--- formatters.setup {
---   { command = "stylua" },
---   {
---     command = "prettier",
---     extra_args = { "--print-width", "100" },
---     filetypes = { "typescript", "typescriptreact" },
---   },
--- }
--- local linters = require "lvim.lsp.null-ls.linters"
--- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     command = "shellcheck",
---     args = { "--severity", "warning" },
---   },
--- }
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
 lvim.plugins = {
@@ -256,13 +205,9 @@ lvim.plugins = {
                     inc_rename = false,           -- enables an input dialog for inc-rename.nvim
                     lsp_doc_border = false,       -- add a border to hover docs and signature help
                 },
-                --   {
-                --     view = "split",
-                --     filter = { event = "msg_show", min_height = 20 },
-                --   },
-                -- },
             })
         end,
+        event = "VeryLazy",
         dependencies = {
             -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
             "MunifTanjim/nui.nvim",
@@ -366,13 +311,6 @@ lvim.plugins = {
 
             -- Optional, for search and quick-switch functionality.
             "nvim-telescope/telescope.nvim",
-
-            -- Optional, an alternative to telescope for search and quick-switch functionality.
-            -- "ibhagwan/fzf-lua"
-
-            -- Optional, another alternative to telescope for search and quick-switch functionality.
-            -- "junegunn/fzf",
-            -- "junegunn/fzf.vim"
 
             -- Optional, alternative to nvim-treesitter for syntax highlighting.
             "godlygeek/tabular",
@@ -483,6 +421,10 @@ lvim.plugins = {
     },
     {
         "junegunn/vim-easy-align"
+    },
+    {
+        'stevearc/dressing.nvim',
+        opts = {},
     }
 }
 
