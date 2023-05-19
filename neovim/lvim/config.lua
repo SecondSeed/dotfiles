@@ -1,3 +1,4 @@
+
 vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
 "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
@@ -55,7 +56,7 @@ lvim.keys.insert_mode["<C-j>"] = "<Down>"
 lvim.keys.insert_mode["<C-k>"] = "<Up>"
 lvim.keys.insert_mode["<C-h>"] = "<Left>"
 lvim.keys.insert_mode["<C-l>"] = "<Right>"
-lvim.keys.insert_mode["<C-v>"] = '"+P'
+lvim.keys.insert_mode["<C-v>"] = '<C-r>+'
 lvim.keys.visual_mode["<C-v>"] = '"+P'
 lvim.keys.normal_mode["yil"] = "^y$"
 lvim.keys.normal_mode["j"] = "gj"
