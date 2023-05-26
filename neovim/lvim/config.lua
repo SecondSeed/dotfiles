@@ -1,4 +1,3 @@
-
 vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
 "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
@@ -28,11 +27,13 @@ vim.g.clipboard = {
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.wrap = true
-vim.opt.foldenable = false
+vim.opt.foldenable = true
+vim.opt.foldmethod = "indent"
+vim.opt.foldlevelstart = 99
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.et = true
 vim.opt.cot = "menu,preview,noinsert,noselect"
--- remove mappings
--- lvim.lsp.buffer_mappings.normal_mode["gl"] = nil
+-- vim.g.translator_proxy_url =  'http://x00664994:xxm-HUAWEI123@proxy.huawei.com:8080'
 
 -- general
 lvim.log.level = "info"
@@ -66,14 +67,13 @@ lvim.keys.visual_mode["H"] = "^"
 lvim.keys.normal_mode["L"] = "$"
 lvim.keys.visual_mode["L"] = "$"
 lvim.keys.normal_mode["<C-m>"] = ":nohl<CR>"
+lvim.keys.visual_mode['gs'] = false
+lvim.keys.normal_mode['gs'] = false
 
 -- remove for replace-with-register
 vim.api.nvim_set_keymap("n", 'gr', '<Plug>(ReplaceWithRegisterOperator)', {})
 vim.api.nvim_set_keymap("x", 'gr', '<Plug>(ReplaceWithRegisterVisual)', {})
 vim.api.nvim_set_keymap("x", 'grr', '<Plug>(ReplaceWithRegisterLine)', {})
-
-vim.api.nvim_set_keymap('v', '<C-_>', '<Plug>(comment_toggle_linewise_visual)', {})
-vim.api.nvim_set_keymap('n', '<C-_>', '<Plug>(comment_toggle_linewise_current)', {})
 
 -- vim-easy-align
 vim.api.nvim_set_keymap("n", "ga", "<Plug>(EasyAlign)", {})
@@ -110,8 +110,13 @@ lvim.builtin.which_key.mappings['e'] = {
 lvim.builtin.which_key.mappings["sb"] = { "<cmd>Telescope buffers<cr>", "Find buffers" }
 lvim.builtin.which_key.mappings["sP"] = { "<cmd>Telescope projects<CR>", "Projects" }
 lvim.builtin.telescope.defaults.layout_strategy = 'horizontal'
-lvim.builtin.telescope.defaults.layout_config = {height = 0.9, width = 0.9, prompt_position = 'bottom', preview_width = 0.6}
-lvim.builtin.telescope.defaults.file_ignore_patterns = {'.obsidian', '.git', '.idea', '.vscode'}
+lvim.builtin.telescope.defaults.layout_config = {
+    height = 0.9,
+    width = 0.9,
+    prompt_position = 'bottom',
+    preview_width = 0.45
+}
+lvim.builtin.telescope.defaults.file_ignore_patterns = { '.obsidian', '.git', '.idea', '.vscode' }
 
 -- snippets
 lvim.builtin.luasnip.sources.friendly_snippets = true
@@ -121,8 +126,8 @@ lvim.builtin.which_key.mappings['o'] = {
     name = "Obsidian",
     ['d'] = { "<cmd>ObsidianToday<cr>", "ObsidianToday" },
     ['p'] = { "<cmd>ObsidianProject<cr>", "ObsidianProject" },
-    ['g'] = { "<cmd>Telescope live_grep search_dirs=D:/note/note<CR>", "Search text"},
-    ['f'] = { "<cmd>Telescope find_files search_dirs=D:/note/note<CR>", "Find file"}
+    ['g'] = { "<cmd>Telescope live_grep search_dirs=D:/note/note<CR>", "Search text" },
+    ['f'] = { "<cmd>Telescope find_files search_dirs=D:/note/note<CR>", "Find file" }
 }
 
 -- gitsigns
@@ -153,6 +158,16 @@ lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementatio
 
 lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
 
+if vim.g.neovide then
+    vim.g.neovide_transparency = 0.86
+    -- vim.g.transparency = 1
+    -- vim.g.neovide_profiler = true
+    vim.g.neovide_hide_mouse_when_typing = true
+    vim.g.neovide_cursor_vfx_opacity = 200.0
+    vim.g.neovide_cursor_vfx_mode = "railgun"
+    vim.o.guifont = "SauceCodePro Nerd Font Mono"
+end
+
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
 lvim.plugins = {
     {
@@ -170,6 +185,9 @@ lvim.plugins = {
         event = "BufWinEnter",
         config = function()
             require('leap').add_default_mappings()
+            vim.api.nvim_set_keymap('n', 'gw', '<Plug>(leap-cross-window)', {})
+            vim.api.nvim_set_keymap('x', 'gw', '<Plug>(leap-cross-window)', {})
+            vim.api.nvim_set_keymap('o', 'gw', '<Plug>(leap-cross-window)', {})
         end
     },
     {
@@ -178,45 +196,6 @@ lvim.plugins = {
         config = function()
             require("auto-save").setup()
         end
-    },
-    {
-        "folke/noice.nvim",
-        config = function()
-            require("noice").setup({
-                -- add any options here
-                lsp = {
-                    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-                    override = {
-                        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                        ["vim.lsp.util.stylize_markdown"] = true,
-                        ["cmp.entry.get_documentation"] = true,
-                    },
-                    hover = {
-                        enabled = false
-                    },
-                    signature = {
-                        enabled = false
-                    }
-                },
-                -- -- you can enable a preset for easier configuration
-                presets = {
-                    bottom_search = true,         -- use a classic bottom cmdline for search
-                    command_palette = true,       -- position the cmdline and popupmenu together
-                    long_message_to_split = true, -- long messages will be sent to a split
-                    inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-                    lsp_doc_border = false,       -- add a border to hover docs and signature help
-                },
-            })
-        end,
-        event = "VeryLazy",
-        dependencies = {
-            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-            "MunifTanjim/nui.nvim",
-            -- OPTIONAL:
-            --   `nvim-notify` is only needed, if you want to use the notification view.
-            --   If not available, we use `mini` as the fallback
-            "rcarriga/nvim-notify",
-        }
     },
     {
         'leoluz/nvim-dap-go',
@@ -424,8 +403,7 @@ lvim.plugins = {
         "junegunn/vim-easy-align"
     },
     {
-        'stevearc/dressing.nvim',
-        opts = {},
+        'vim-scripts/argtextobj.vim'
     }
 }
 
@@ -436,4 +414,10 @@ lvim.plugins = {
 --     -- let treesitter use bash highlight for zsh files as well
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
+-- })
+-- vim.api.nvim_create_autocmd({ 'BufReadPost', 'FileReadPost' }, {
+--     pattern = '*',
+--     callback = function()
+--         vim.api.nvim_command("normal zR")
+--     end,
 -- })
