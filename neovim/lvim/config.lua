@@ -1,24 +1,27 @@
-vim.opt.shell = "pwsh.exe -NoLogo"
-vim.opt.shellcmdflag =
-"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
-vim.cmd [[
+local os_sysname = vim.loop.os_uname().sysname
+local is_windows = os_sysname:find 'Windows' and true or false
+if is_windows then
+    vim.opt.shell = "pwsh.exe -NoLogo"
+    vim.opt.shellcmdflag =
+    "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+    vim.cmd [[
     let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
     let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
     set shellquote= shellxquote=
   ]]
 
--- Set a compatible clipboard manager
-vim.g.clipboard = {
-    copy = {
-        ["+"] = "win32yank.exe -i --crlf",
-        ["*"] = "win32yank.exe -i --crlf",
-    },
-    paste = {
-        ["+"] = "win32yank.exe -o --lf",
-        ["*"] = "win32yank.exe -o --lf",
-    },
-}
-
+    -- Set a compatible clipboard manager
+    vim.g.clipboard = {
+        copy = {
+            ["+"] = "win32yank.exe -i --crlf",
+            ["*"] = "win32yank.exe -i --crlf",
+        },
+        paste = {
+            ["+"] = "win32yank.exe -o --lf",
+            ["*"] = "win32yank.exe -o --lf",
+        },
+    }
+end
 --[[
  THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
  `lvim` is the global options object
@@ -30,6 +33,8 @@ vim.opt.wrap = true
 vim.opt.foldenable = true
 vim.opt.foldmethod = "indent"
 vim.opt.foldlevelstart = 99
+vim.opt.textwidth = 120
+vim.opt.colorcolumn = "+1"
 -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.et = true
 vim.opt.cot = "menu,preview,noinsert,noselect"
@@ -106,6 +111,19 @@ lvim.builtin.which_key.mappings['e'] = {
     ["r"] = { "<cmd>:NvimTreeRefresh<CR>", "Reload explorer" }
 }
 
+-- custom text operation
+lvim.builtin.which_key.vmappings['u'] = {
+    name = "Utilities",
+    ['S'] = { "<cmd>'<,'>s/\\s\\+/ /g<CR>", "Replace all mutiSpace with Single one" },
+    ['s'] = { "<cmd>'<,'>s/\\s\\+/ /<CR>", "Replace first mutiSpace with Single one" },
+}
+
+lvim.builtin.which_key.mappings['u'] = {
+    name = "Utilities",
+    ['S'] = { "<cmd>s/\\s\\+/ /g<CR>", "Replace all mutiSpace with Single one" },
+    ['s'] = { "<cmd>s/\\s\\+/ /<CR>", "Replace first mutiSpace with Single one" },
+}
+
 -- telescope
 lvim.builtin.which_key.mappings["sb"] = { "<cmd>Telescope buffers<cr>", "Find buffers" }
 lvim.builtin.which_key.mappings["sP"] = { "<cmd>Telescope projects<CR>", "Projects" }
@@ -117,6 +135,9 @@ lvim.builtin.telescope.defaults.layout_config = {
     preview_width = 0.45
 }
 lvim.builtin.telescope.defaults.file_ignore_patterns = { '.obsidian', '.git', '.idea', '.vscode' }
+lvim.builtin.which_key.mappings["f"] = { "<cmd>Telescope find_files<cr>", "Find files" }
+vim.api.nvim_set_keymap("n", "<C-S-f>", "<cmd>Telescope live_grep<CR>", {})
+
 
 -- snippets
 lvim.builtin.luasnip.sources.friendly_snippets = true
@@ -131,7 +152,7 @@ lvim.builtin.which_key.mappings['o'] = {
 }
 
 -- gitsigns
-lvim.builtin.gitsigns.opts.current_line_blame = true
+lvim.builtin.gitsigns.opts.current_line_blame = false
 
 -- markdown
 lvim.builtin.which_key.mappings['m'] = {
@@ -159,13 +180,15 @@ lvim.lsp.buffer_mappings.normal_mode['gi'] = { "<cmd>Telescope lsp_implementatio
 lvim.lsp.buffer_mappings.normal_mode['gr'] = nil
 
 if vim.g.neovide then
-    vim.g.neovide_transparency = 0.86
+    vim.g.neovide_transparency = 0.85
     -- vim.g.transparency = 1
     -- vim.g.neovide_profiler = true
     vim.g.neovide_hide_mouse_when_typing = true
     vim.g.neovide_cursor_vfx_opacity = 200.0
     vim.g.neovide_cursor_vfx_mode = "railgun"
+    vim.g.neovide_scroll_animation_length = 0
     vim.o.guifont = "SauceCodePro Nerd Font Mono"
+    lvim.transparent_window = true
 end
 
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
@@ -194,7 +217,11 @@ lvim.plugins = {
         url = "https://git.sr.ht/~nedia/auto-save.nvim",
         event = "BufWinEnter",
         config = function()
-            require("auto-save").setup()
+            require("auto-save").setup({
+                save_fn = function()
+                    vim.cmd("silent! w")
+                end
+            })
         end
     },
     {
@@ -407,17 +434,32 @@ lvim.plugins = {
     }
 }
 
--- -- Autocommands (`:help autocmd`) <https://neovim.io/doc/user/autocmd.html>
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "zsh",
---   callback = function()
---     -- let treesitter use bash highlight for zsh files as well
---     require("nvim-treesitter.highlight").attach(0, "bash")
---   end,
--- })
--- vim.api.nvim_create_autocmd({ 'BufReadPost', 'FileReadPost' }, {
---     pattern = '*',
+vim.api.nvim_create_user_command("GoImportsOrganize", function()
+    if vim.bo.filetype == 'go' then
+        local params = vim.lsp.util.make_range_params(nil, vim.lsp.util._get_offset_encoding(0))
+        params.context = { only = { "source.organizeImports" } }
+
+        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 10000)
+        for _, res in pairs(result or {}) do
+            for _, r in pairs(res.result or {}) do
+                if r.edit then
+                    vim.lsp.util.apply_workspace_edit(r.edit, vim.lsp.util._get_offset_encoding(0))
+                else
+                    vim.lsp.buf.execute_command(r.command)
+                end
+            end
+        end
+    end
+end
+, {})
+
+-- vim.api.nvim_create_autocmd({ "BufLeave", "BufHidden" }, {
+--     pattern = "*.go",
 --     callback = function()
---         vim.api.nvim_command("normal zR")
---     end,
+--         local active_clients = vim.lsp.get_active_clients({ bufnr = 0 })
+--         if next(active_clients) ~= nil then
+--             vim.lsp.buf.format()
+--             vim.cmd("silent! w")
+--         end
+--     end
 -- })
