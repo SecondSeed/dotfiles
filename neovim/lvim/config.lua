@@ -75,6 +75,9 @@ lvim.keys.normal_mode["<C-m>"] = ":nohl<CR>"
 lvim.keys.visual_mode['gs'] = false
 lvim.keys.normal_mode['gs'] = false
 
+-- command map
+vim.api.nvim_set_keymap("c", "<C-V>", '<C-R>+', {})
+
 -- remove for replace-with-register
 vim.api.nvim_set_keymap("n", 'gr', '<Plug>(ReplaceWithRegisterOperator)', {})
 vim.api.nvim_set_keymap("x", 'gr', '<Plug>(ReplaceWithRegisterVisual)', {})
@@ -267,18 +270,6 @@ lvim.plugins = {
         cmd = "Glow"
     },
     {
-        -- clipboard manager
-        "AckslD/nvim-neoclip.lua",
-        dependencies = {
-            -- you'll need at least one of these
-            { 'nvim-telescope/telescope.nvim' },
-            -- {'ibhagwan/fzf-lua'},
-        },
-        config = function()
-            require('neoclip').setup()
-        end,
-    },
-    {
         "jackMort/ChatGPT.nvim",
         event = "VeryLazy",
         config = function()
@@ -406,7 +397,7 @@ lvim.plugins = {
         end,
     },
     {
-        "SecondSeed/nvim-picgo",
+        "askfiy/nvim-picgo",
         branch = 'for_hw',
         pin = true,
         config = function()
