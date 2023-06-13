@@ -5,41 +5,12 @@
         "command": "workbench.action.openSettings"
     },
     {
-        "key": "ctrl+w shift+k",
-        "command": "workbench.action.navigateUp"
-    },
-    {
-        "key": "ctrl+w shift+j",
-        "command": "workbench.action.navigateDown"
-    },
-    {
-        "key": "ctrl+w shift+h",
-        "command": "workbench.action.navigateLeft"
-    },
-    {
-        "key": "ctrl+w shift+l",
-        "command": "workbench.action.navigateRight"
-    },
-    {
-        "key": "ctrl+w ctrl+up",
-        "command": "workbench.action.increaseViewSize"
-    },
-    {
-        "key": "ctrl+w ctrl+down",
-        "command": "workbench.action.decreaseViewSize"
-    },
-    {
-        "key": "alt+f12",
-        "command": "-editor.action.peekDefinition",
-        "when": "editorHasDefinitionProvider && editorTextFocus && !inReferenceSearchEditor && !isInEmbeddedEditor"
-    },
-    {
-        "key": "alt+f12",
+        "key": "ctrl+t",
         "command": "workbench.action.terminal.toggleTerminal",
         "when": "terminal.active"
     },
     {
-        "command": "-vscode-neovim.send",
-        "key": "ctrl+a"
+        "key": "ctrl+t",
+        "command": "-workbench.action.showAllSymbols"
     }
 ]
