@@ -3,6 +3,7 @@ vim.g.mapleader = " "
 -- option
 vim.opt.textwidth = 120
 vim.opt.colorcolumn = "+1"
+vim.opt.clipboard = "unnamedplus"
 
 if vim.g.vscode then
     -- nvim_set_keymap
@@ -13,8 +14,6 @@ if vim.g.vscode then
     map('n', 'yil', '^y$', {
         noremap = true
     })
-    -- map('n', '<C-m>', ':nohl<CR>', {noremap = true})
-    -- map('i', '<C-m>', '<ESC>:nohl<CR>', {noremap = true})
 
     -- move
     map('n', 'H', '^', {
@@ -35,8 +34,14 @@ if vim.g.vscode then
     map('n', '<leader>lc', "<cmd>call VSCodeNotify('references-view.showCallHierarchy')<cr>", {})
     map('n', '<leader>li', "<cmd>call VSCodeNotify('editor.action.organizeImports')<cr>", {})
 
-    -- reveal in os
+    -- buffer
     map('n', '<leader>bf', "<cmd>call VSCodeNotify('revealFileInOS')<cr>", {})
+    map('n', '<leader>bc', "<cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<cr>", {})
+    map('n', '<leader>ba', "<cmd>call VSCodeNotify('workbench.action.closeAllEditors')<cr>", {})
+    map('n', '<leader>bh', "<cmd>call VSCodeNotify('workbench.action.closeEditorsToTheLeft')<cr>", {})
+    map('n', '<leader>bl', "<cmd>call VSCodeNotify('workbench.action.closeEditorsToTheRight')<cr>", {})
+    map('n', ']b', "<cmd>call VSCodeNotify('workbench.action.nextEditorInGroup')<cr>", {})
+    map('n', '[b', "<cmd>call VSCodeNotify('workbench.action.previousEditorInGroup')<cr>", {})
 
     -- navigation
     map('n', 'gi', "<cmd>call VSCodeNotify('editor.action.goToImplementation')<cr>", {})
@@ -46,8 +51,6 @@ if vim.g.vscode then
     map('n', '<C-i>', "<cmd>call VSCodeNotify('workbench.action.navigateForward')<cr>", {})
     map('n', '<leader>ne', "<cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<cr>", {})
     map('n', '<leader>pe', "<cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<cr>", {})
-    map('n', ']b', "<cmd>call VSCodeNotify('workbench.action.nextEditorInGroup')<cr>", {})
-    map('n', '[b', "<cmd>call VSCodeNotify('workbench.action.previousEditorInGroup')<cr>", {})
 
     map('n', "<leader>t", "<cmd>call VSCodeNotify('workbench.action.toggleZenMode')<cr>", {})
 
@@ -65,6 +68,17 @@ if vim.g.vscode then
     map('n', '<leader>di', "<cmd>call VSCodeNotify('workbench.action.debug.stepInto')<cr>", {})
     map('n', '<leader>df', "<cmd>call VSCodeNotify('workbench.action.debug.stop')<cr>", {})
 
+    -- quickscope color
+    vim.cmd [[
+        highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+        highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+    ]]
+    
+    -- window
+    map('n', '<leader>wz', "<cmd>call VSCodeNotify('workbench.action.toggleZenMode')<cr>", {})
+    
+    -- git
+    map('n', '<leader>gd', "<cmd>call VSCodeNotify('gitlens.diffWithPrevious')<cr>", {})
 
     local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
     if not vim.loop.fs_stat(lazypath) then
@@ -103,7 +117,7 @@ if vim.g.vscode then
     }, {
         "mg979/vim-visual-multi",
         event = "BufWinEnter"
-    }, {"junegunn/vim-easy-align"}, {'vim-scripts/argtextobj.vim'}})
+    }, {"junegunn/vim-easy-align"}, {'vim-scripts/argtextobj.vim'}, {'unblevable/quick-scope'}, {'machakann/vim-highlightedyank'}})
 else
     -- ordinary Neovim
 end

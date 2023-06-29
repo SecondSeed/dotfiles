@@ -8,7 +8,6 @@ set smartcase
 set showmatch
 set showmode
 set nu
-set relativenumber
 set clipboard+=unnamed
 set clipboard+=ideaput
 set cursorline
@@ -24,6 +23,7 @@ set argtextobj
 set multiple-cursors
 set which-key
 set highlightedyank
+set quickscope
 
 """ Plugin settings ----------------------------------
 let g:argtextobj_pairs="(:),{:},<:>"
@@ -46,10 +46,10 @@ set timeoutlen=5000
 "Motion specialization
 vmap <C-h> 10zh
 vmap <C-l> 10zl
-imap <C-j> <Down>
-imap <C-k> <Up>
-imap <C-h> <Left>
-imap <C-l> <Right>
+" imap <C-j> <Down>
+" imap <C-k> <Up>
+" imap <C-h> <Left>
+" imap <C-l> <Right>
 " imap <C-i> <CR>
 "Left and right vision
 nnoremap zH 50zh
@@ -66,49 +66,22 @@ nnoremap k gk
 " 复制一行不包括换行符
 nnoremap yil ^y$
 
-""""""""""""""""""""""""""""""""""""""Edit""""""""""""""""""""""""""""""""""""""
-" = 自动缩进此行
-""""""""""""""""""""""""""""""""""""""Refactoring""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>re :action RenameElement<CR>
-
-nnoremap <Leader>mv :action Move<CR>
-nnoremap <Leader>ms :action MakeStatic<CR>
-nnoremap <Leader>ci :action ConvertToInstanceMethod<CR>
-nnoremap <Leader>il :action Inline<CR>
-nnoremap <Leader>em :action ExtractMethod<CR>
-nnoremap <Leader>ei :action ExtractInterface<CR>
-" 封装值域
-nnoremap <Leader>ef :action EncapsulateFields<CR>
-nnoremap <Leader>rmo :action ReplaceMethodWithMethodObject<CR>
-nnoremap <Leader>iv :action IntroduceVariable<CR>
-nnoremap <Leader>ic :action IntroduceConstant<CR>
-nnoremap <Leader>ip :action IntroduceParameter<CR>
-nnoremap <Leader>if :action IntroduceField<CR>
-nnoremap <Leader>po :action IntroduceParameterObject<CR>
-nnoremap <Leader>pd :action MemberPushDown<CR>
-nnoremap <Leader>pu :action MembersPullUp<CR>
-nnoremap <Leader>rn :action RenameFile<CR>
-nnoremap <Leader>cs  :action ChangeSignature<CR>
-nnoremap <Leader>ai :action AnonymousToInner<CR>
+nnoremap - :split<CR>
+nnoremap \ :vsplit<CR>
 
 """"""""""""""""""""""""""""""""""""""Jump articles""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>ts :action GotoSymbol<CR>
-nnoremap  <Leader>tu :action Toolkit.GotoService<CR>
-nnoremap <Leader>ta :action GotoAction<CR>
-nnoremap <Leader>tf :action GotoFile<CR>
 nnoremap gt :action GotoTest<CR>
-nnoremap <Leader>tc :action GotoClass<CR>
-nnoremap <Leader>tp :action FindInPath<CR>
+" nnoremap <Leader>tc :action GotoClass<CR>
 nnoremap <Leader>ne :action GotoNextError<CR>
 nnoremap <Leader>pe :action GotoPreviousError<CR>
 nnoremap gs :action GotoSuperMethod<CR>
 nnoremap gi :action GotoImplementation<CR>
 nnoremap gd :action GotoDeclaration<CR>
 nnoremap gD :action GotoTypeDeclaration<CR>
-nnoremap <leader>gl :action JumpToLastChange<CR>
-nnoremap <leader>gn :action JumpToNextChange<CR>
-nnoremap <Leader>rf :action RecentFiles<CR>
-nnoremap <Leader>rcf :action RecentChangedFiles<CR>
+" nnoremap <leader>gl :action JumpToLastChange<CR>
+" nnoremap <leader>gn :action JumpToNextChange<CR>
+" nnoremap <Leader>rf :action RecentFiles<CR>
+" nnoremap <Leader>rcf :action RecentChangedFiles<CR>
 nnoremap <C-o> :action Back<CR>
 nnoremap <C-i> :action Forward<CR>
 nnoremap gO :action PreviousOccurence<CR>
@@ -116,117 +89,121 @@ nnoremap go :action NextOccurence<CR>
 
 """"""""""""""""""""""""""""""""""""""Run""""""""""""""""""""""""""""""""""""""
 nnoremap <leader>rc :action RunConfiguration<CR>
-nnoremap <leader>rr :action Run<CR>
+" nnoremap <leader>rr :action Run<CR>
 " nnoremap <leader>rn :action RunClass<CR>
-nnoremap <leader>dd :action Debug<CR>
-nnoremap <leader>dn :action DebugClass<CR>
-nnoremap <leader>cc :action Coverage<CR>
-nnoremap <leader>cn :action RunCoverage<CR>
-nnoremap <leader>sp :action Stop<CR>
+" nnoremap <leader>dn :action DebugClass<CR>
+" nnoremap <leader>cc :action Coverage<CR>
+" nnoremap <leader>cn :action RunCoverage<CR>
 
 """"""""""""""""""""""""""""""""""""""Debug""""""""""""""""""""""""""""""""""""""
-nnoremap <C-j> :action StepOver<CR>
-nnoremap <C-k> :action Resume<CR>
-nnoremap <C-h> :action StepOut<CR>
-nnoremap <C-l> :action StepInto<CR>
-
-nnoremap <leader>bp :action ToggleLineBreakpoint<CR>
-nnoremap <leader>qe :action QuickEvaluateExpression <CR>
-nnoremap <leader>ee :action EvaluateExpression <CR>
-nnoremap <leader>fr :action Debugger.ForceEarlyReturn<CR>
-nnoremap <leader>daw :action Debugger.AddToWatch<CR>
+nnoremap <leader>ds :action ChooseDebugConfiguration<CR>
+" nnoremap <leader>ds :action Debug<CR>
+nnoremap <leader>dc :action Resume<CR>
+nnoremap <leader>do :action StepOut<CR>
+nnoremap <leader>di :action StepInto<CR>
+nnoremap <leader>dt :action ToggleLineBreakpoint<CR>
+nnoremap <leader>dC :action ForceRunToCursor<CR>
+nnoremap <leader>dE :action QuickEvaluateExpression <CR>
+nnoremap <leader>de :action EvaluateExpression <CR>
+" nnoremap <leader>fr :action Debugger.ForceEarlyReturn<CR>
+" nnoremap <leader>daw :action Debugger.AddToWatch<CR>
 " very important in debug
-nnoremap <leader>fc :action ForceRunToCursor<CR>
-nnoremap <leader>hs :action Hotswap<CR>
-nnoremap <leader>rb :action Debugger.RemoveAllBreakpointsInFile<CR>
-nnoremap <leader>rab :action Debugger.RemoveAllBreakpoints<CR>
-nnoremap <leader>df :action Debugger.PopFrame<CR>
-nnoremap <leader>pp :action ShowExecutionPoint<CR>
-nnoremap <leader>ds :action StreamTracerAction<CR>
-nnoremap <leader>mb :action XDebugger.MuteBreakpoints<CR>
-nnoremap <leader>ab :action ViewBreakpoints<CR>
-nnoremap <leader>eb :action EditBreakpoint<CR>
+" nnoremap <leader>hs :action Hotswap<CR>
+" nnoremap <leader>rb :action Debugger.RemoveAllBreakpointsInFile<CR>
+" nnoremap <leader>rab :action Debugger.RemoveAllBreakpoints<CR>
+" nnoremap <leader>df :action Debugger.PopFrame<CR>
+" nnoremap <leader>pp :action ShowExecutionPoint<CR>
+" nnoremap <leader>ds :action StreamTracerAction<CR>
+nnoremap <leader>dm :action XDebugger.MuteBreakpoints<CR>
+nnoremap <leader>dv :action ViewBreakpoints<CR>
+nnoremap <leader>db :action EditBreakpoint<CR>
 
-""""""""""""""""""""""""""""""""""""""Window""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>am  :action ActivateMavenToolWindow<CR>
-nnoremap <Leader>adb  :action ActivateDatabaseToolWindow<CR>
-nnoremap <Leader>aT   :action ActivateTODOToolWindow<CR>
-nnoremap <Leader>af :action ActivateFavoritesToolWindow<CR>
-nnoremap <Leader>ap :action ActivateProjectToolWindow<CR>
-nnoremap <Leader>ag :action ActivateVersionControlToolWindow<CR>
-nnoremap <Leader>as :action ActivateServicesToolWindow<CR>
-nnoremap <Leader>ar :action ActivateRestServicesToolWindow<CR>
-nnoremap <Leader>ad :action ActivateDebugToolWindow<CR>
-nnoremap <Leader>aw :action ActivateRunToolWindow<CR>
-nnoremap <Leader>at :action ActivateTerminalToolWindow<CR>
-nnoremap <Leader>mtw :action MaximizeToolWindow<CR>
-nnoremap <Leader>ha :action HideAllWindows<CR>
-" select in project view
-nnoremap <Leader>si :action SelectInProjectView<CR>
-nnoremap <Leader>tz :action ToggleZenMode<CR>
-nnoremap <Leader>mog :action MoveEditorToOppositeTabGroup<CR>
-"关闭其他所有
-nnoremap <Leader>co :action CloseAllEditorsButActive<CR>
-"关闭右侧的tab
-nnoremap <Leader>cr :action CloseAllToTheRight<CR>
-"关闭左侧的tab
-nnoremap <Leader>cl :action CloseAllToTheLeft<CR>
-"关闭所有tab
-nnoremap <Leader>ca :action CloseAllEditors<CR>
-vnoremap <Leader>sa :action Annotate<CR>
-nnoremap <Leader>nw :action NextProjectWindow<CR>
-nnoremap <Leader>pw :action PreviousProjectWindow<CR>
-nnoremap <Leader>lw :action JumpToLastWindow<CR>
-nnoremap <Leader>tw :action Terminal.OpenInTerminal<CR>
-nnoremap <Leader>sa :action Annotate<CR>
-nnoremap \ :split<CR>
-nnoremap <S-\> :vsplit<CR>
-nnoremap <C-Left> :action StretchSplitToLeft<CR>
-nnoremap <C-Right> :action StretchSplitToRight<CR>
-nnoremap <C-Up> :action StretchSplitToTop<CR>
-nnoremap <C-Down> :action StretchSplitToBottom<CR>
+""""""""""""""""""""""""""""""""""""""Git""""""""""""""""""""""""""""""""""""""
+vnoremap <Leader>ga :action Annotate<CR>
+nnoremap <Leader>ga :action Annotate<CR>
+nnoremap <Leader>gd :action Compare.SameVersion<CR>
+
+""""""""""""""""""""""""""""""""""""""Buffer""""""""""""""""""""""""""""""""""""
 nnoremap [b :action PreviousTab<CR>
 nnoremap ]b :action NextTab<CR>
-nnoremap <Leader>uw :action Unsplit<CR>
-nnoremap <Leader>uW :action UnsplitAll<CR>
-nnoremap <Leader>sd :action Compare.SameVersion<CR>
-nnoremap <Leader>ct :action CloseContent<CR>
+nnoremap <Leader>bf :action RevealIn<CR>
+" select in project view
+nnoremap <Leader>bp :action SelectInProjectView<CR>
+
+"关闭其他所有
+nnoremap <Leader>bo :action CloseAllEditorsButActive<CR>
+"关闭右侧的tab
+nnoremap <Leader>bl :action CloseAllToTheRight<CR>
+"关闭左侧的tab
+nnoremap <Leader>bh :action CloseAllToTheLeft<CR>
+"关闭所有tab
+nnoremap <Leader>ba :action CloseAllEditors<CR>
+nnoremap <Leader>bc :action CloseContent<CR>
+
+""""""""""""""""""""""""""""""""""""""Lsp""""""""""""""""""""""""""""""""""""
+nnoremap <Leader>lf :action ReformatCode<CR>
+nnoremap <Leader>lr :action RenameElement<CR>
+vnoremap <Leader>ls :action SurroundWith<CR>
+nnoremap <Leader>li :action OptimizeImports<CR>
+
+""""""""""""""""""""""""""""""""""""""Window""""""""""""""""""""""""""""""""""""""
+nnoremap <Leader>wm  :action ActivateMavenToolWindow<CR>
+nnoremap <Leader>wd  :action ActivateDatabaseToolWindow<CR>
+" nnoremap <Leader>aT   :action ActivateTODOToolWindow<CR>
+" nnoremap <Leader>af :action ActivateFavoritesToolWindow<CR>
+nnoremap <Leader>wp :action ActivateProjectToolWindow<CR>
+nnoremap <Leader>wg :action ActivateVersionControlToolWindow<CR>
+nnoremap <Leader>ws :action ActivateServicesToolWindow<CR>
+nnoremap <Leader>wr :action ActivateRestServicesToolWindow<CR>
+nnoremap <Leader>wd :action ActivateDebugToolWindow<CR>
+" nnoremap <Leader>aw :action ActivateRunToolWindow<CR>
+nnoremap <C-t> :action ActivateTerminalToolWindow<CR>
+nnoremap <Leader>wt :action ActivateTerminalToolWindow<CR>
+nnoremap <Leader>wM :action MaximizeToolWindow<CR>
+nnoremap <Leader>wh :action HideAllWindows<CR>
+nnoremap <Leader>wz :action ToggleZenMode<CR>
+" nnoremap <Leader>mog :action MoveEditorToOppositeTabGroup<CR>
+" nnoremap <Leader>nw :action NextProjectWindow<CR>
+" nnoremap <Leader>pw :action PreviousProjectWindow<CR>
+" nnoremap <Leader>lw :action JumpToLastWindow<CR>
+" nnoremap <Leader>tw :action Terminal.OpenInTerminal<CR>
+" nnoremap <C-Left> :action StretchSplitToLeft<CR>
+" nnoremap <C-Right> :action StretchSplitToRight<CR>
+" nnoremap <C-Up> :action StretchSplitToTop<CR>
+" nnoremap <C-Down> :action StretchSplitToBottom<CR>
+" nnoremap <Leader>uw :action Unsplit<CR>
+" nnoremap <Leader>uW :action UnsplitAll<CR>
 
 """"""""""""""""""""""""""""""""""""""Information""""""""""""""""""""""""""""""""""""""
-nnoremap <Leader>ed :action ShowErrorDescription<CR>
-nnoremap <Leader>ti :action ExpressionTypeInfo<CR>
-nnoremap <Leader>pi :action ParameterInfo<CR>
-nnoremap <Leader>jd :action QuickJavaDoc<CR>
-nnoremap <Leader>fs :action FileStructurePopup<CR>
-" nnoremap <Leader>sd :action ShowUmlDiagram<CR>
-nnoremap <Leader>ch :action CallHierarchy<CR>
-nnoremap <Leader>fu :action FindUsages<CR>
-nnoremap <Leader>su :action ShowUsages<CR>
-nnoremap <Leader>mh :action MethodHierarchy<CR>
-nnoremap <Leader>ss  :action ShowSettings<CR>
-nnoremap <Leader>ps :action ShowProjectStructureSettings<CR>
+nnoremap <Leader>ie :action ShowErrorDescription<CR>
+nnoremap <Leader>it :action ExpressionTypeInfo<CR>
+nnoremap <Leader>ip :action ParameterInfo<CR>
+nnoremap <Leader>is :action FileStructurePopup<CR>
+nnoremap <Leader>id :action ShowUmlDiagram<CR>
+nnoremap <Leader>ic :action CallHierarchy<CR>
+nnoremap <Leader>iu :action FindUsages<CR>
+nnoremap <Leader>im :action MethodHierarchy<CR>
 
 """"""""""""""""""""""""""""""""""""""Utilities""""""""""""""""""""""""""""""""
-vnoremap <Leader>sw :action SurroundWith<CR>
-nnoremap = :action ReformatCode<CR>
-nnoremap <Leader>sm :action ShowPopupMenu<CR>
-nnoremap <Leader>st :action SaveAsTemplate<CR>
-nnoremap <Leader>cap   :action CopyAbsolutePath<CR>
-nnoremap <Leader>ccp   :action CopyContentRootPath<CR>
-nnoremap <Leader>oi :action OptimizeImports<CR>
-nnoremap <Leader>cv :action ChangeView<CR>
+nnoremap <leader>ua :action ShowIntentionActions<CR>
+nnoremap <Leader>um :action ShowPopupMenu<CR>
+" nnoremap <Leader>st :action SaveAsTemplate<CR>
+nnoremap <Leader>uP   :action CopyAbsolutePath<CR>
+nnoremap <Leader>up   :action CopyContentRootPath<CR>
+nnoremap <Leader>ur :action Refactorings.QuickListPopupAction<CR>
+nnoremap <Leader>ud :action EditorPopupMenuDebug<CR>
+" nnoremap <Leader>cv :action ChangeView<CR>
 " nnoremap <Leader>ag :action antlr.Generate<CR>
-nnoremap <Leader>bc   :action ByteCodeViewer<CR>
-nnoremap <Leader>gfu :action GenerateFullRestUrl<CR>
-nnoremap <Leader>atf :action AddToFavorites<CR>
-nnoremap <Leader>cE :action CopyElement<CR>
-nnoremap <Leader>nE :action NewElement<CR>
-nnoremap <Leader>dE :action SafeDelete<CR>
-nnoremap <Leader>cp :action CheckinProject<CR>
-nnoremap <Leader>nc :action NewClass<CR>
-nnoremap <Leader>ri :action RevealIn<CR>
-nnoremap <Leader>ga :action Generate<CR>
-nnoremap <Leader>cu :action CloseAllUnmodifiedEditors<CR>
+" nnoremap <Leader>bc   :action ByteCodeViewer<CR>
+" nnoremap <Leader>gfu :action GenerateFullRestUrl<CR>
+" nnoremap <Leader>atf :action AddToFavorites<CR>
+" nnoremap <Leader>cE :action CopyElement<CR>
+" nnoremap <Leader>nE :action NewElement<CR>
+" nnoremap <Leader>dE :action SafeDelete<CR>
+" nnoremap <Leader>cp :action CheckinProject<CR>
+" nnoremap <Leader>nc :action NewClass<CR>
+" nnoremap <Leader>ga :action Generate<CR>
+" nnoremap <Leader>cu :action CloseAllUnmodifiedEditors<CR>
 
 " 查找光标选中的内容
 vmap * "ry/<C-R>r<CR>N
@@ -249,5 +226,5 @@ nnoremap gh <C-W>h
 nnoremap gl <C-W>l
 nnoremap gk <C-W>k
 nnoremap gj <C-W>j
-nnoremap <C-m> :nohl<CR>
-inoremap <C-m> <ESC>:nohl<CR>
+" nnoremap <C-m> :nohl<CR>
+" inoremap <C-m> <ESC>:nohl<CR>
