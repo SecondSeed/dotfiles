@@ -126,9 +126,9 @@ nnoremap <Leader>gd :action Compare.SameVersion<CR>
 """"""""""""""""""""""""""""""""""""""Buffer""""""""""""""""""""""""""""""""""""
 nnoremap [b :action PreviousTab<CR>
 nnoremap ]b :action NextTab<CR>
-nnoremap <Leader>bf :action RevealIn<CR>
+nnoremap <Leader>br :action RevealIn<CR>
 " select in project view
-nnoremap <Leader>bp :action SelectInProjectView<CR>
+nnoremap <Leader>bs :action SelectInProjectView<CR>
 
 "关闭其他所有
 nnoremap <Leader>bo :action CloseAllEditorsButActive<CR>
@@ -139,6 +139,8 @@ nnoremap <Leader>bh :action CloseAllToTheLeft<CR>
 "关闭所有tab
 nnoremap <Leader>ba :action CloseAllEditors<CR>
 nnoremap <Leader>bc :action CloseContent<CR>
+nnoremap <Leader>bP :action CopyAbsolutePath<CR>
+nnoremap <Leader>bp :action CopyContentRootPath<CR>
 
 """"""""""""""""""""""""""""""""""""""Lsp""""""""""""""""""""""""""""""""""""
 nnoremap <Leader>lf :action ReformatCode<CR>

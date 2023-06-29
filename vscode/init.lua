@@ -35,13 +35,15 @@ if vim.g.vscode then
     map('n', '<leader>li', "<cmd>call VSCodeNotify('editor.action.organizeImports')<cr>", {})
 
     -- buffer
-    map('n', '<leader>bf', "<cmd>call VSCodeNotify('revealFileInOS')<cr>", {})
+    map('n', '<leader>br', "<cmd>call VSCodeNotify('revealFileInOS')<cr>", {})
     map('n', '<leader>bc', "<cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<cr>", {})
     map('n', '<leader>ba', "<cmd>call VSCodeNotify('workbench.action.closeAllEditors')<cr>", {})
     map('n', '<leader>bh', "<cmd>call VSCodeNotify('workbench.action.closeEditorsToTheLeft')<cr>", {})
     map('n', '<leader>bl', "<cmd>call VSCodeNotify('workbench.action.closeEditorsToTheRight')<cr>", {})
     map('n', ']b', "<cmd>call VSCodeNotify('workbench.action.nextEditorInGroup')<cr>", {})
     map('n', '[b', "<cmd>call VSCodeNotify('workbench.action.previousEditorInGroup')<cr>", {})
+    map('n', '<leader>bP', "<cmd>call VSCodeNotify('copyFilePath')<cr>", {})
+    map('n', '<leader>bp', "<cmd>call VSCodeNotify('copyRelativeFilePath')<cr>", {})
 
     -- navigation
     map('n', 'gi', "<cmd>call VSCodeNotify('editor.action.goToImplementation')<cr>", {})
