@@ -4,6 +4,8 @@ vim.g.mapleader = " "
 vim.opt.textwidth = 120
 vim.opt.colorcolumn = "+1"
 vim.opt.clipboard = "unnamedplus"
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
 if vim.g.vscode then
     -- nvim_set_keymap
@@ -71,14 +73,14 @@ if vim.g.vscode then
     map('n', '<leader>df', "<cmd>call VSCodeNotify('workbench.action.debug.stop')<cr>", {})
 
     -- quickscope color
-    vim.cmd [[
-        highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-        highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
-    ]]
-    
+    -- vim.cmd [[
+    --     highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+    --     highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+    -- ]]
+
     -- window
     map('n', '<leader>wz', "<cmd>call VSCodeNotify('workbench.action.toggleZenMode')<cr>", {})
-    
+
     -- git
     map('n', '<leader>gd', "<cmd>call VSCodeNotify('gitlens.diffWithPrevious')<cr>", {})
 
@@ -119,7 +121,7 @@ if vim.g.vscode then
     }, {
         "mg979/vim-visual-multi",
         event = "BufWinEnter"
-    }, {"junegunn/vim-easy-align"}, {'vim-scripts/argtextobj.vim'}, {'unblevable/quick-scope'}, {'machakann/vim-highlightedyank'}})
+    }, {"junegunn/vim-easy-align"}, {'vim-scripts/argtextobj.vim'}, {'machakann/vim-highlightedyank'}})
 else
     -- ordinary Neovim
 end
